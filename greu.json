@@ -1,9 +1,0 @@
-[
-    {
-        "Cmd": "gnuplot",
-        "OpenTag": ".GNUPLOT",
-        "InputPrefix": "set terminal eps; set output \"a.tmp\"",
-        "InputPostfix": "exit",
-        "ReplaceCloseTag": ".PSPIC a.tmp"
-    }
-]

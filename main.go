@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"io"
 	"os"
@@ -22,16 +23,21 @@ const (
 )
 
 func main() {
+	cfgFile := flag.String("cfg", "greu.yml", "config file")
+
 	r := bufio.NewReader(os.Stdin)
 	inputState := Pass
 	currentCommand := new(CommandDefinition)
 	var execution Execution
 
-	cfg, err := LoadConfig("greu.json")
+	flag.Parse()
+
+	cfg, err := LoadConfig(*cfgFile)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Cannot decode config:", err)
 		os.Exit(1)
 	}
+	fmt.Println(cfg)
 
 	for {
 		line, err := r.ReadBytes('\n')

@@ -1,23 +1,24 @@
 package main
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
 	"strings"
+
+	"gopkg.in/yaml.v3"
 )
 
 type Config []CommandDefinition
 
 type CommandDefinition struct {
-	Cmd             string
-	OpenTag         string
-	CloseTag        string
-	ReplaceOpenTag  string
-	ReplaceCloseTag string
-	InputPrefix     string
-	InputPostfix    string
+	Cmd             string `yaml:"Cmd"`
+	OpenTag         string `yaml:"OpenTag"`
+	CloseTag        string `yaml:"CloseTag"`
+	ReplaceOpenTag  string `yaml:"ReplaceOpenTag"`
+	ReplaceCloseTag string `yaml:"ReplaceCloseTag"`
+	InputPrefix     string `yaml:"InputPrefix"`
+	InputPostfix    string `yaml:"InputPostfix"`
 }
 
 func LoadConfig(path string) (Config, error) {
@@ -27,9 +28,9 @@ func LoadConfig(path string) (Config, error) {
 		return cfg, fmt.Errorf("cannot open file: %w", err)
 	}
 
-	err = json.Unmarshal(body, &cfg)
+	err = yaml.Unmarshal(body, &cfg)
 	if err != nil {
-		return cfg, fmt.Errorf("cannot decode json: %w", err)
+		return cfg, fmt.Errorf("cannot decode yaml: %w", err)
 	}
 
 	for i := range cfg {
@@ -37,6 +38,10 @@ func LoadConfig(path string) (Config, error) {
 		if err != nil {
 			return cfg, fmt.Errorf("invalid command definition: %w", err)
 		}
+	}
+
+	if len(cfg) == 0 {
+		return cfg, fmt.Errorf("no command defined")
 	}
 	return cfg, nil
 }

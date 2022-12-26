@@ -1,0 +1,6 @@
+- Cmd: gnuplot
+  OpenTag: .GNUPLOT
+  InputPrefix: set terminal eps
+  InputPostfix: exit
+  ReplaceOpenTag: .PS
+  ReplaceCloseTag: .PE
