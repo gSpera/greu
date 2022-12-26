@@ -12,13 +12,14 @@ import (
 type Config []CommandDefinition
 
 type CommandDefinition struct {
-	Cmd             string `yaml:"Cmd"`
-	OpenTag         string `yaml:"OpenTag"`
-	CloseTag        string `yaml:"CloseTag"`
-	ReplaceOpenTag  string `yaml:"ReplaceOpenTag"`
-	ReplaceCloseTag string `yaml:"ReplaceCloseTag"`
-	InputPrefix     string `yaml:"InputPrefix"`
-	InputPostfix    string `yaml:"InputPostfix"`
+	Cmd             string   `yaml:"Cmd"`
+	Args            []string `yaml:"Args"`
+	OpenTag         string   `yaml:"OpenTag"`
+	CloseTag        string   `yaml:"CloseTag"`
+	ReplaceOpenTag  string   `yaml:"ReplaceOpenTag"`
+	ReplaceCloseTag string   `yaml:"ReplaceCloseTag"`
+	InputPrefix     string   `yaml:"InputPrefix"`
+	InputPostfix    string   `yaml:"InputPostfix"`
 }
 
 func LoadConfig(path string) (Config, error) {

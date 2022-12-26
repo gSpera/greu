@@ -14,6 +14,7 @@ greu defines the commands in a config, the primary fields are:
 | Name | Meaning | Example |
 -------|---------|-------|
 | Cmd  | The shell command to execute | gnuplot | 
+| Args | The shell arguments | -d  |
 | OpenTag | The opening tag detected in the input file by greu | .GNUPLOTSTART |
 | CloseTag | The closing tag detected in the input file by greu | .GNUPLOTEND | 
 | ReplaceOpenTag | A string that will be inserted in the output before the command output | .PS |
