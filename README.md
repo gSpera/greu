@@ -20,7 +20,14 @@ greu defines the commands in a config, the primary fields are:
 | ReplaceOpenTag | A string that will be inserted in the output before the command output | .PS |
 | ReplaceCloseTag | A string that will be inserted in the output after the command output | .PE |
 | InputPrefix | A string that will be passed to the command before the input file lines, usefull for some prelude | set terminal eps | 
-| InputPostfix | A string that will be passed to the command before closing, usefull to exit | exit | 
+| InputPostfix | A string that will be passed to the command before closing, usefull to exit | exit |
+
+## Variables
+Most values can use some special variable, all replace automatically by greu
+
+| Name | Meaning | Example |
+|------|---------|---------|
+| GREU_TMP | A temp file that the program can freely use, it will be cancelled after the program exit | ReplaceCloseTag: .PSPIC GREU_TMP |
 
 ## Example
 Let's say that we want to incorportate gnuplot graphs in our document and that our roff implementation has a .PS/.PE commands to include raw eps.

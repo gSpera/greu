@@ -64,6 +64,11 @@ func (e Execution) Exit(timeout time.Duration) error {
 	io.Copy(os.Stdout, e.readStdout)
 	io.Copy(os.Stderr, e.readStderr)
 	e.readStdout.Close()
+	defer func() {
+		name := e.tmpFile.Name()
+		e.tmpFile.Close()
+		os.Remove(name)
+	}()
 
 	wait := make(chan error)
 
