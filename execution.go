@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"strings"
 	"time"
 )
 
@@ -13,6 +14,7 @@ type Execution struct {
 	writeStdin io.WriteCloser
 	readStdout io.ReadCloser
 	readStderr io.ReadCloser
+	tmpFile    *os.File
 }
 
 func NewExecution(cmd string, args ...string) (Execution, error) {
@@ -21,6 +23,14 @@ func NewExecution(cmd string, args ...string) (Execution, error) {
 	}
 
 	var err error
+
+	e.tmpFile, err = os.CreateTemp("", "greu-")
+	if err != nil {
+		return e, fmt.Errorf("cannot create temp file: %w", err)
+	}
+
+	e.cmd.Env = append(e.cmd.Env, fmt.Sprintf("GREU_TMP=%q", e.tmpFile.Name()))
+
 	e.writeStdin, err = e.cmd.StdinPipe()
 	if err != nil {
 		return e, fmt.Errorf("cannot get stdin pipe: %w", err)
@@ -69,4 +79,16 @@ func (e Execution) Exit(timeout time.Duration) error {
 		err := e.cmd.Process.Kill()
 		return fmt.Errorf("killed process timeout, error of kill: %w", err)
 	}
+}
+
+func (e Execution) Replace(str string) string {
+	return strings.ReplaceAll(str, "GREU_TMP", e.tmpFile.Name())
+}
+
+func (e Execution) ReplaceMultiple(str ...string) []string {
+	for i := range str {
+		str[i] = e.Replace(str[i])
+	}
+
+	return str
 }

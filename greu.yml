@@ -1,6 +1,5 @@
 - Cmd: gnuplot
   OpenTag: .GNUPLOT
-  InputPrefix: set terminal eps
+  InputPrefix: set terminal eps; set output 'GREU_TMP'
   InputPostfix: exit
-  ReplaceOpenTag: .PS
-  ReplaceCloseTag: .PE
+  ReplaceCloseTag: .PSPIC GREU_TMP

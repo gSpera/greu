@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"strings"
 	"time"
 )
 
@@ -37,24 +36,17 @@ func main() {
 		fmt.Fprintln(os.Stderr, "Cannot decode config:", err)
 		os.Exit(1)
 	}
-	fmt.Println(cfg)
 
 	for {
-		line, err := r.ReadBytes('\n')
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			panic(err)
-		}
+		line, readErr := r.ReadBytes('\n')
 
 		// Detect start of command
 		if cmd, detected := cfg.DetectOpenCommand(line); inputState == Pass && detected {
-			args := strings.Split(cmd.Cmd, " ")[1:]
-			execCmd := strings.Split(cmd.Cmd, " ")[0]
-			embeddedArgs := strings.Split(string(line), " ")[1:]
-			args = append(args, embeddedArgs...)
-			execution, err = NewExecution(execCmd, args...)
+			args := make([]string, len(cmd.Args))
+			copy(args, cmd.Args)
+			args = execution.ReplaceMultiple(args...)
+
+			execution, err = NewExecution(cmd.Cmd, args...)
 			if err != nil {
 				panic(err)
 			}
@@ -63,8 +55,8 @@ func main() {
 			inputState = Command
 
 			// Write prefix
-			fmt.Fprintln(execution, currentCommand.InputPrefix)
-			fmt.Println(currentCommand.ReplaceOpenTag)
+			fmt.Fprintln(execution, execution.Replace(currentCommand.InputPrefix))
+			fmt.Println(execution.Replace(currentCommand.ReplaceOpenTag))
 
 			continue
 		}
@@ -72,7 +64,7 @@ func main() {
 		// Detect end of command
 		if close := currentCommand.DetectCloseCommand(line); inputState == Command && close {
 			// Write postfix
-			fmt.Fprintln(execution, currentCommand.InputPostfix)
+			fmt.Fprintln(execution, execution.Replace(currentCommand.InputPostfix))
 
 			err := execution.Exit(time.Second)
 			if err != nil {
@@ -80,7 +72,7 @@ func main() {
 			}
 
 			// Write close tag after flush
-			fmt.Println(currentCommand.ReplaceCloseTag)
+			fmt.Println(execution.Replace(currentCommand.ReplaceCloseTag))
 
 			inputState = Pass
 			currentCommand = nil
@@ -101,5 +93,13 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
+
+		if readErr == io.EOF {
+			break
+		}
+		if readErr != nil {
+			panic(err)
+		}
+
 	}
 }
