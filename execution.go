@@ -18,9 +18,7 @@ type Execution struct {
 }
 
 func NewExecution(cmd string, args ...string) (Execution, error) {
-	e := Execution{
-		cmd: exec.Command(cmd, args...),
-	}
+	e := Execution{}
 
 	var err error
 
@@ -28,6 +26,9 @@ func NewExecution(cmd string, args ...string) (Execution, error) {
 	if err != nil {
 		return e, fmt.Errorf("cannot create temp file: %w", err)
 	}
+
+	args = e.ReplaceMultiple(args...)
+	e.cmd = exec.Command(cmd, args...)
 
 	e.cmd.Env = append(e.cmd.Env, fmt.Sprintf("GREU_TMP=%q", e.tmpFile.Name()))
 

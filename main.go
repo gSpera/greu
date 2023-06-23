@@ -44,7 +44,6 @@ func main() {
 		if cmd, detected := cfg.DetectOpenCommand(line); inputState == Pass && detected {
 			args := make([]string, len(cmd.Args))
 			copy(args, cmd.Args)
-			args = execution.ReplaceMultiple(args...)
 
 			execution, err = NewExecution(cmd.Cmd, args...)
 			if err != nil {
