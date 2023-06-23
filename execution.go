@@ -61,9 +61,12 @@ func (e Execution) Read(p []byte) (int, error) {
 	return e.readStdout.Read(p)
 }
 
-func (e Execution) Exit(timeout time.Duration) error {
-	io.Copy(os.Stdout, e.readStdout)
+func (e Execution) Exit(timeout time.Duration, ignoreStdout bool) error {
+	if !ignoreStdout {
+		io.Copy(os.Stdout, e.readStdout)
+	}
 	io.Copy(os.Stderr, e.readStderr)
+
 	e.readStdout.Close()
 	defer func() {
 		name := e.tmpFile.Name()

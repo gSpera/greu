@@ -66,7 +66,7 @@ func main() {
 			// Write postfix
 			fmt.Fprintln(execution, execution.Replace(currentCommand.InputPostfix))
 
-			err := execution.Exit(time.Second)
+			err := execution.Exit(time.Second, currentCommand.IgnoreStdOut)
 			if err != nil {
 				panic(err)
 			}

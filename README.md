@@ -21,6 +21,7 @@ greu defines the commands in a config, the primary fields are:
 | ReplaceCloseTag | A string that will be inserted in the output after the command output | .PE |
 | InputPrefix | A string that will be passed to the command before the input file lines, usefull for some prelude | set terminal eps | 
 | InputPostfix | A string that will be passed to the command before closing, usefull to exit | exit |
+| IgnoreStdOut | Ignore the output of the command, usefull when the output is a file, see GREU_TMP | true |
 
 ## Variables
 Most values can use some special variable, all replace automatically by greu

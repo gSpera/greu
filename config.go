@@ -20,6 +20,7 @@ type CommandDefinition struct {
 	ReplaceCloseTag string   `yaml:"ReplaceCloseTag"`
 	InputPrefix     string   `yaml:"InputPrefix"`
 	InputPostfix    string   `yaml:"InputPostfix"`
+	IgnoreStdOut    bool     `yaml:"IgnoreStdOut"`
 }
 
 func LoadConfig(path string) (Config, error) {
