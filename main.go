@@ -23,6 +23,7 @@ const (
 
 func main() {
 	cfgFile := flag.String("cfg", "greu.yml", "config file")
+	tmpDir := flag.String("tmp-dir", "", "Temporary files dir")
 
 	r := bufio.NewReader(os.Stdin)
 	inputState := Pass
@@ -45,7 +46,7 @@ func main() {
 			args := make([]string, len(cmd.Args))
 			copy(args, cmd.Args)
 
-			execution, err = NewExecution(cmd.Cmd, args...)
+			execution, err = NewExecution(*tmpDir, cmd.Cmd, args...)
 			if err != nil {
 				panic(err)
 			}

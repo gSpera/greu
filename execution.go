@@ -17,12 +17,12 @@ type Execution struct {
 	tmpFile    *os.File
 }
 
-func NewExecution(cmd string, args ...string) (Execution, error) {
+func NewExecution(tmpDir string, cmd string, args ...string) (Execution, error) {
 	e := Execution{}
 
 	var err error
 
-	e.tmpFile, err = os.CreateTemp("", "greu-")
+	e.tmpFile, err = os.CreateTemp(tmpDir, "greu-")
 	if err != nil {
 		return e, fmt.Errorf("cannot create temp file: %w", err)
 	}
